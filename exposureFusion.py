@@ -95,7 +95,12 @@ for channel in range(3):
     g, logE = gsolve(Z,B,lb,w)
     logIrradianceMap[:, :, channel] = (irradiance(Istack, B, g, w)).reshape(dim0, dim1)
 
-    plt.figure(); plt.plot(g, 'o'); plt.show()
+#%% Simplistic tone mapping (via Reinhard)
+gamma = 1/2.2
+irradianceMap = np.exp(logIrradianceMap)**gamma
+irradianceMap /= (irradianceMap+1)
+irradianceMap *= 255
+irradianceMap = np.uint8(irradianceMap)
 
 #%% Plotting (log) irradiance maps
 channelTitle = ["Red", "Green", "Blue"]
@@ -113,11 +118,6 @@ plt.show()
 # fig.savefig("figures/logIrradianceMaps.png")
 
 #%% Plotting RGB log irradiance map
-gamma = 1/2.2
-irradianceMap = np.exp(logIrradianceMap)**gamma
-irradianceMap /= (irradianceMap+1)
-irradianceMap *= 255
-irradianceMap = np.uint8(irradianceMap)
 
 fig = plt.figure(figsize = (3,3), dpi = 300)
 ax = fig.add_subplot(111)
@@ -126,5 +126,5 @@ ax.axis("off")
 plt.tight_layout()
 plt.show()
 
-hdrImage = Image.fromarray(irradianceMap)
-hdrImage.save("figures/hdrImage.jpg")
+# hdrImage = Image.fromarray(irradianceMap)
+# hdrImage.save("figures/hdrImage.jpg")
