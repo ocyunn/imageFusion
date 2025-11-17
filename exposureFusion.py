@@ -99,17 +99,18 @@ for channel in range(3):
 
 #%% Plotting (log) irradiance maps
 channelTitle = ["Red", "Green", "Blue"]
-fig = plt.figure(figsize = (7,3), dpi = 300)
+fig = plt.figure(figsize = (6,3), dpi = 300)
 
 for i in range(3):
     ax = fig.add_subplot(1,3,i+1)
-    cm = ax.imshow(logIrradianceMap[:, :, i], cmap="jet", vmin = -6, vmax = 6)
+    cm = ax.imshow(logIrradianceMap[:, :, i], cmap="RdBu_r", vmin = -6, vmax = 6)
     ax.axis("off")
     ax.set_title(channelTitle[i])
 
-fig.colorbar(cm)
 plt.tight_layout()
 plt.show()
+
+# fig.savefig("figures/logIrradianceMaps.png")
 
 #%% Plotting RGB log irradiance map
 gamma = 1/2.2
@@ -120,7 +121,10 @@ irradianceMap = np.uint8(irradianceMap)
 
 fig = plt.figure(figsize = (3,3), dpi = 300)
 ax = fig.add_subplot(111)
-cm = ax.imshow(irradianceMap)
+ax.imshow(irradianceMap)
 ax.axis("off")
 plt.tight_layout()
 plt.show()
+
+hdrImage = Image.fromarray(irradianceMap)
+hdrImage.save("figures/hdrImage.jpg")
